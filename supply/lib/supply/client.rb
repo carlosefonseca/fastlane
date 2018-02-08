@@ -294,6 +294,24 @@ module Supply
       end
     end
 
+    # Set the provided language as the default language
+    def update_default_language(language)
+      ensure_active_edit!
+
+      call_google_api do
+        detail = android_publisher.get_detail(current_package_name, current_edit.id)
+        detail.default_language = language
+        android_publisher.update_detail(current_package_name, current_edit.id, detail)
+      end
+    end
+
+    # Delete the listing for the provided language
+    def delete_listing_for_language(language)
+      ensure_active_edit!
+
+      call_google_api { android_publisher.delete_listing(current_package_name, current_edit.id, language) }
+    end
+
     #####################################################
     # @!group Screenshots
     #####################################################
